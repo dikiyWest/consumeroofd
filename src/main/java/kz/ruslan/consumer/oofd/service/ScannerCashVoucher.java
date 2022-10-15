@@ -125,7 +125,7 @@ public final class ScannerCashVoucher {
             }
             i++;
         }
-        cashVoucher.setItems(purchases);
+        cashVoucher.setPurchases(purchases);
     }
 
     private boolean isValid(){

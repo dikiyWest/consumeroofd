@@ -1,18 +1,31 @@
 package kz.ruslan.consumer.oofd.domain;
 
 
+import org.hibernate.annotations.CreationTimestamp;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public final class CashVoucher {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String companyName;
     private String IIN;
     private String FP;
     private LocalDateTime date;
     private Double totalSum;
-    private List<Purchase> items;
+
+
+    @ElementCollection(targetClass = Purchase.class, fetch = FetchType.EAGER)
+    private List<Purchase> purchases;
+
+    @CreationTimestamp
+    private LocalDateTime createdDate;
 
 
     public CashVoucher() {
@@ -24,10 +37,26 @@ public final class CashVoucher {
         this.FP = o.FP;
         this.date = o.date;
         this.totalSum = o.totalSum;
-        this.items = new ArrayList<Purchase>();
-        for (Purchase item : o.getItems()) {
-            this.items.add(new Purchase(item));
+        this.purchases = new ArrayList<Purchase>();
+        for (Purchase item : o.getPurchases()) {
+            this.purchases.add(new Purchase(item));
         }
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
     }
 
     public String getCompanyName() {
@@ -75,12 +104,12 @@ public final class CashVoucher {
         this.totalSum = totalSum;
     }
 
-    public List<Purchase> getItems() {
-        return items;
+    public List<Purchase> getPurchases() {
+        return purchases;
     }
 
-    public void setItems(List<Purchase> items) {
-        this.items = items;
+    public void setPurchases(List<Purchase> purchases) {
+        this.purchases = purchases;
     }
 
     @Override
@@ -91,7 +120,7 @@ public final class CashVoucher {
                 ", FP='" + FP + '\'' +
                 ", date=" + date +
                 ", totalSum=" + totalSum +
-                ", items=" + items +
+                ", purchases=" + purchases +
                 '}';
     }
 }

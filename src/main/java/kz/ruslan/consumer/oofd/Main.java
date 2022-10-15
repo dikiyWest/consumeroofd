@@ -1,22 +1,21 @@
 package kz.ruslan.consumer.oofd;
 
-import kz.ruslan.consumer.oofd.domain.CashVoucher;
-import kz.ruslan.consumer.oofd.service.ScannerCashVoucher;
+import kz.ruslan.consumer.oofd.service.CashVoucherService;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-
+@SpringBootApplication
 public class Main {
     public static void main(String[] args) {
-        try {
-            ScannerCashVoucher scannerCashVoucher = new ScannerCashVoucher("" +
-                    "https://consumer.oofd.kz/ticket/7b7f19d4-66f7-4c5c-86e0-b6b7749f9885");
-            CashVoucher cashVoucher = scannerCashVoucher.getCashVoucher();
-            System.out.println(cashVoucher);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        ConfigurableApplicationContext applicationContext = SpringApplication.run(Main.class, args);
+
+        CashVoucherService customerService = applicationContext.getBean(CashVoucherService.class);
+
+        System.out.println(customerService.getCashVoucherFromOOFDAndSave(
+                "https://consumer.oofd.kz/ticket/368a6a86-b0f5-4c36-a717-9da207f85b8a"
+        ));
+
+        applicationContext.close();
     }
 }

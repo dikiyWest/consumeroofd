@@ -1,5 +1,11 @@
 package kz.ruslan.consumer.oofd.domain;
 
+import javax.persistence.Embeddable;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+
+
+@Embeddable
 public class Purchase {
 
     private String name;
